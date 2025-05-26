@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой профиль Steam</title>
-    <link rel="stylesheet" href="public/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
@@ -108,7 +107,7 @@
           transform: scale(1.05);
         }
         .album {
-          background: linear-gradient(rgba(54, 79, 60, 0.25), rgba(73, 101, 77, 0.55)), url('public/photos/fine-lemon-demon.jpg');
+          background: linear-gradient(rgba(54, 79, 60, 0.25), rgba(73, 101, 77, 0.55)), url('/photos/fine-lemon-demon.jpg');
           background-repeat: no-repeat;
           background-size: 300px;
           width: 100%;
@@ -206,6 +205,7 @@
 
     <div class="container">
         <div id="loading">Загрузка данных...</div>
+
         <div id="mainContent" style="display: none;">
             <div id="steamProfile"></div>
             <h2 class="section-title">Моя музыка</h2>
@@ -232,11 +232,11 @@
             </div>
 
             <div class="track-container">
-                <img src="public/photos/night-dancer-imase.jpg" alt="Обложка imase" class="album-art">
+                <img src="/photos/night-dancer-imase.jpg" alt="Обложка imase" class="album-art">
                 <div class="track-info">
                     <h3>Night Dancer</h3>
                     <p>imase</p>
-                    <audio controls src="public/music/imase-night-dancer.mp3" style="width: 100%;"></audio>
+                    <audio controls src="/music/imase-night-dancer.mp3" style="width: 100%;"></audio>
                 </div>
             </div>
         </div>
@@ -299,7 +299,7 @@
         getSteamData();
 
         document.addEventListener('DOMContentLoaded', () => {
-          const audio = new Audio('public/music/Lemon-Demon-Fine.mp3');
+          const audio = new Audio('/music/Lemon-Demon-Fine.mp3');
           const playBtn = document.querySelector('#player .play');
           const pauseBtn = document.querySelector('#player .pause');
           const heartBtn = document.querySelector('#player .heart');

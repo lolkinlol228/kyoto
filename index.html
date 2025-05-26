@@ -1,341 +1,103 @@
-```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Me</title>
-  <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --primary: #4B0082; /* Indigo */
-      --secondary: #6A0DAD; /* Dark Purple */
-      --light: #D8BFD8; /* Light Purple */
-      --dark: #2F0047; /* Very Dark Purple */
-      --white: #E6E6FA; /* Lavender */
-    }
-    body {
-      background: linear-gradient(to bottom left, var(--light) 10%, var(--secondary) 80%);
-      font-family: 'Questrial', sans-serif;
-      color: var(--white);
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      overflow-x: hidden;
-      margin: 0;
-    }
-    #player {
-      background: var(--white);
-      position: relative;
-      margin: 2rem auto;
-      width: 300px;
-      height: 300px;
-      overflow: hidden;
-      border-radius: 5px;
-      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
-      transition: all 0.5s ease-in-out;
-    }
-    #player:hover {
-      transform: scale(1.05);
-    }
-    .album {
-      background-size: cover;
-      width: 100%;
-      height: 100%;
-      border-radius: 5px;
-      position: absolute;
-    }
-    .heart, .shuffle {
-      position: absolute;
-      right: 10px;
-      color: var(--white);
-      margin: 10px;
-      transition: all 0.4s ease;
-      cursor: pointer;
-    }
-    .heart.clicked, .shuffle.clicked {
-      color: var(--primary);
-      transform: scale(1.2);
-    }
-    .info {
-      height: 115px;
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-      background: rgba(var(--white), 0.85);
-      transform: translateY(35px);
-      transition: all 0.5s ease-in-out;
-    }
-    .info.up {
-      transform: translateY(0);
-    }
-    .progress-bar {
-      height: 5px;
-      width: 73%;
-      margin: 6% auto;
-      background: var(--light);
-      border-radius: 10px;
-    }
-    .fill {
-      background-color: var(--secondary);
-      width: 35%;
-      height: 0.3rem;
-      border-radius: 2px;
-    }
-    .time--current, .time--total {
-      color: var(--dark);
-      font-size: 10px;
-      position: absolute;
-      margin-top: -2px;
-    }
-    .time--current { left: 15px; }
-    .time--total { right: 15px; }
-    .song-name, .artist-name {
-      font-family: 'Questrial', sans-serif;
-      text-transform: uppercase;
-      margin: 0;
-      text-align: center;
-    }
-    .song-name {
-      font-size: 0.8em;
-      letter-spacing: 3px;
-      color: var(--dark);
-    }
-    .artist-name {
-      font-size: 0.6em;
-      letter-spacing: 1.5px;
-      color: var(--dark);
-      margin-top: 5px;
-    }
-    .controls {
-      display: flex;
-      align-items: center;
-      font-size: 0.8em;
-      justify-content: center;
-      color: var(--secondary);
-    }
-    .controls .play, .controls .pause, .controls .previous, .controls .next {
-      margin: 15px 25px;
-      color: var(--secondary);
-      cursor: pointer;
-    }
-    .hidden { display: none; }
-    .steam-profile {
-      background: rgba(var(--white), 0.1);
-      border-radius: 10px;
-      padding: 2rem;
-      margin: 2rem;
-      max-width: 800px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    .heatmap {
-      background: rgba(var(--dark), 0.8);
-      padding: 1rem;
-      border-radius: 5px;
-    }
-    .track-button {
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      background-color: var(--secondary);
-      color: var(--white);
-      cursor: pointer;
-      margin-right: 1rem;
-    }
-    .track-button.active {
-      background-color: var(--primary);
-    }
-    .track-button:hover {
-      background-color: var(--primary);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyoto's Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="steam-profile">
-    <div class="flex items-center mb-4">
-      <img id="avatar" src="https://via.placeholder.com/100" alt="Avatar" class="w-16 h-16 rounded-full mr-4"/>
-      <div>
-        <h2 id="nickname" class="text-xl font-bold">Nickname (Kyoto)</h2>
-        <p id="status" class="text-sm text-gray-400">Offline</p>
-      </div>
-    </div>
-    <p class="mb-4">Just a gamer who loves Dota 2 and music. Always chasing that next rank!</p>
-    <h3 class="text-lg font-semibold">Dota 2 Stats</h3>
-    <p id="dota-hours">Total Hours: 0 hours</p>
-    <p>Highest Rank: Immortal | Current Rank: Divine V</p>
-    <h4 class="text-md font-semibold mt-2">Tinker Stats</h4>
-    <p>Matches: 320 | Win Rate: 58% | KDA: 4.2</p>
-    <h4 class="text-md font-semibold mt-2">Recent Matches</h4>
-    <ul id="recent-matches" class="list-disc pl-5"></ul>
-    <h4 class="text-md font-semibold mt-2">Dota 2 Activity</h4>
-    <canvas id="dotaActivityChart" class="w-full h-32"></canvas>
-    <h4 class="text-md font-semibold mt-2">Steam Activity Heatmap</h4>
-    <canvas id="activityChart" class="w-full h-32 heatmap"></canvas>
-    <div class="mt-4">
-      <h3 class="text-lg font-semibold">Music Player</h3>
-      <div class="flex space-x-4 mb-4">
-        <button class="track-button active" data-track="0">Fine</button>
-        <button class="track-button" data-track="1">Night Dancer</button>
-      </div>
-      <div id="player">
-        <div id="album" class="album" style="background-image: linear-gradient(rgba(47,0,71,0.25), rgba(75,0,130,0.55)), url(/photos/fine-lemon-demon.jpg);"></div>
-        <div class="info">
-          <div class="progress-bar">
-            <div class="time--current">1:25</div>
-            <div class="time--total">-3:15</div>
-            <div class="fill"></div>
-          </div>
-          <div class="currently-playing">
-            <h2 id="song-name" class="song-name">Fine</h2>
-            <h3 id="artist-name" class="artist-name">Lemon Demon</h3>
-          </div>
-          <div class="controls">
-            <div class="previous"><i class="fas fa-backward"></i></div>
-            <div class="play"><i class="fas fa-play"></i></div>
-            <div class="pause hidden"><i class="fas fa-pause"></i></div>
-            <div class="next"><i class="fas fa-forward"></i></div>
-          </div>
+
+<div class="container">
+    <div id="steam-profile" class="card">
+        <div class="profile-header">
+            <img id="steam-avatar" src="https://via.placeholder.com/184" alt="Steam Avatar">
+            <div class="profile-info">
+                <h1 id="steam-name">Загрузка...</h1>
+                <h2 class="subtitle">Kyoto</h2>
+                <p id="steam-status" class="offline">Offline</p>
+            </div>
         </div>
-      </div>
+        <div class="profile-body">
+            <h3>Описание</h3>
+            <p id="steam-desc">Описание профиля не загружено.</p>
+        </div>
     </div>
-  </div>
-  <script>
-    const tracks = [
-      {
-        title: "Fine",
-        artist: "Lemon Demon",
-        url: "/music/Lemon-Demon-Fine.mp3",
-        image: "/photos/fine-lemon-demon.jpg"
-      },
-      {
-        title: "Night Dancer",
-        artist: "imase",
-        url: "/music/imase-night-dancer.mp3",
-        image: "/photos/night-dancer-imase.jpg"
-      }
-    ];
-    let currentTrack = 0;
-    const audio = new Audio(tracks[currentTrack].url);
-    const player = document.getElementById('player');
-    const album = document.getElementById('album');
-    const songName = document.getElementById('song-name');
-    const artistName = document.getElementById('artist-name');
-    const playBtn = document.querySelector('.play');
-    const pauseBtn = document.querySelector('.pause');
-    const trackButtons = document.querySelectorAll('.track-button');
 
-    function updateTrack(index) {
-      currentTrack = index;
-      audio.src = tracks[currentTrack].url;
-      album.style.backgroundImage = `linear-gradient(rgba(47,0,71,0.25), rgba(75,0,130,0.55)), url(${tracks[currentTrack].image})`;
-      songName.textContent = tracks[currentTrack].title;
-      artistName.textContent = tracks[currentTrack].artist;
-      trackButtons.forEach((btn, i) => btn.classList.toggle('active', i === currentTrack));
-      if (!pauseBtn.classList.contains('hidden')) {
-        audio.play();
-      }
-    }
+    <div id="dota2-stats" class="card">
+        <h2>Статистика Dota 2</h2>
+        <div class="dota-main-stats">
+            <div class="stat-item">
+                <span>Часов в игре</span>
+                <strong id="dota-hours">N/A</strong>
+            </div>
+            <div class="stat-item">
+                <span>Текущий ранг</span>
+                <strong>Легенда 3 <i class="fas fa-medal"></i></strong> </div>
+            <div class="stat-item">
+                <span>Высший ранг</span>
+                <strong>Властелин 1 <i class="fas fa-star"></i></strong> </div>
+        </div>
 
-    trackButtons.forEach((btn, index) => {
-      btn.addEventListener('click', () => updateTrack(index));
-    });
+        <h3>Активность на Tinker</h3>
+        <div class="tinker-stats">
+            <p>Статистика по герою временно недоступна через API.</p>
+            </div>
 
-    playBtn.addEventListener('click', () => {
-      audio.play();
-      playBtn.classList.add('hidden');
-      pauseBtn.classList.remove('hidden');
-    });
+        <h3>Последние сыгранные игры</h3>
+        <div id="recent-games">
+            <p>Загрузка последних игр...</p>
+        </div>
+        
+        <h3>График активности (Пример)</h3>
+        <p class="small-text">Примечание: График является визуальным представлением и не отображает реальные данные из-за ограничений API.</p>
+        <div class="activity-graph">
+            <div class="graph-row">
+                <div class="graph-cell"></div>
+                <div class="graph-cell">Пн</div>
+                <div class="graph-cell">Ср</div>
+                <div class="graph-cell">Пт</div>
+            </div>
+            <div class="graph-body">
+                <div class="graph-column">
+                    <div class="graph-square" style="background-color: #311b92;" title="5 часов"></div>
+                    <div class="graph-square" style="background-color: #23126b;"></div>
+                    <div class="graph-square" style="background-color: #1a0e50;"></div>
+                    <div class="graph-square" style="background-color: #23126b;"></div>
+                    <div class="graph-square" style="background-color: #311b92;" title="6 часов"></div>
+                    <div class="graph-square" style="background-color: #1a0e50;"></div>
+                    <div class="graph-square" style="background-color: #4a148c;" title="8 часов"></div>
+                </div>
+                 </div>
+        </div>
+    </div>
 
-    pauseBtn.addEventListener('click', () => {
-      audio.pause();
-      playBtn.classList.remove('hidden');
-      pauseBtn.classList.add('hidden');
-    });
+    <div id="player">
+        <div class="album"></div>
+        <i class="fa-solid fa-heart heart"></i>
+        <div class="info">
+            <div class="progress-bar">
+                <div class="fill"></div>
+            </div>
+            <div class="time--current">0:00</div>
+            <div class="time--total">0:00</div>
+            <div class="currently-playing">
+                <h2 class="song-name">Symphony</h2>
+                <h3 class="artist-name">Clean Bandit ft. Zara Larsson</h3>
+            </div>
+            <div class="controls">
+                <i class="fa-solid fa-shuffle shuffle"></i>
+                <i class="fa-solid fa-backward-step prev"></i>
+                <i class="fa-solid fa-play play"></i>
+                <i class="fa-solid fa-pause pause"></i>
+                <i class="fa-solid fa-forward-step next"></i>
+                <i class="fa-solid fa-repeat repeat"></i>
+            </div>
+        </div>
+    </div>
+</div>
 
-    document.querySelector('.heart').addEventListener('click', function() {
-      this.classList.toggle('clicked');
-    });
-
-    document.querySelector('.shuffle').addEventListener('click', function() {
-      this.classList.toggle('clicked');
-    });
-
-    player.addEventListener('mouseenter', () => {
-      document.querySelector('.info').classList.add('up');
-    });
-
-    player.addEventListener('mouseleave', () => {
-      document.querySelector('.info').classList.remove('up');
-    });
-
-    // Steam API data
-    fetch('/api/steam-profile')
-      .then(response => response.json())
-      .then(data => {
-        const profile = data.profile || {};
-        const dotaStats = data.dotaStats || {};
-        const recentMatches = data.recentMatches || [];
-        document.getElementById('avatar').src = profile.avatarfull || 'https://via.placeholder.com/100';
-        document.getElementById('nickname').textContent = (profile.personaname || 'Nickname') + ' (Kyoto)';
-        const states = { 0: 'Offline', 1: 'Online', 2: 'Busy', 3: 'Away', 4: 'Snooze', 5: 'Looking to trade', 6: 'Looking to play' };
-        const status = document.getElementById('status');
-        status.textContent = states[profile.personastate] || 'Offline';
-        status.className = `text-sm ${status.textContent === 'Online' ? 'text-green-400' : 'text-gray-400'}`;
-        document.getElementById('dota-hours').textContent = `Total Hours: ${Math.round((dotaStats.playtime_forever || 0) / 60)} hours`;
-        const matchesList = document.getElementById('recent-matches');
-        recentMatches.forEach(match => {
-          const li = document.createElement('li');
-          li.textContent = `Match ID: ${match.match_id} | Result: ${match.result === 0 ? 'Win' : 'Loss'} | Hero: Tinker`;
-          matchesList.appendChild(li);
-        });
-      })
-      .catch(error => console.error('Error fetching Steam data:', error));
-
-    // Dota 2 Activity Chart
-    const dotaCtx = document.getElementById('dotaActivityChart').getContext('2d');
-    new Chart(dotaCtx, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-        datasets: [{
-          label: 'Dota 2 Playtime (hours)',
-          data: [50, 60, 45, 70, 55],
-          borderColor: 'rgba(106,13,173,1)',
-          backgroundColor: 'rgba(106,13,173,0.2)',
-          fill: true,
-        }]
-      },
-      options: {
-        scales: { y: { beginAtZero: true } }
-      }
-    });
-
-    // Steam Activity Heatmap
-    const ctx = document.getElementById('activityChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'matrix',
-      data: {
-        datasets: [{
-          label: 'Steam Activity',
-          data: [
-            {x: 0, y: 0, v: 2}, {x: 1, y: 0, v: 5}, {x: 2, y: 0, v: 0},
-            {x: 0, y: 1, v: 3}, {x: 1, y: 1, v: 4}, {x: 2, y: 1, v: 6},
-          ],
-          backgroundColor: (context) => {
-            const value = context.dataset.data[context.dataIndex].v;
-            return value === 0 ? 'rgba(255,255,255,0.2)' : `rgba(106,13,173,${value / 10})`;
-          },
-          width: ({chart}) => chart.chartArea.width / 7,
-          height: ({chart}) => chart.chartArea.height / 3,
-        }]
-      },
-      options: {
-        scales: { x: { display: false }, y: { display: false } },
-        plugins: { legend: { display: false } }
-      }
-    });
-  </script>
+<script src="script.js"></script>
 </body>
 </html>
-```
